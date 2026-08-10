@@ -1,0 +1,549 @@
+{% extends 'rental/base.html' %}
+
+{% block title %}
+Simon Auto's | Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid py-5">
+
+    <!-- Dashboard Header -->
+    <div class="mb-5">
+
+        <h1 class="text-warning fw-bold">
+            Simon Auto's Dashboard
+        </h1>
+
+        <p class="text-light">
+            Welcome to your car rental management dashboard.
+        </p>
+
+    </div>
+
+
+    <!-- STATISTICS CARDS -->
+
+    <div class="row g-4 mb-5">
+
+        <!-- Total Cars -->
+
+        <div class="col-lg-3 col-md-6">
+            <a href="{% url 'admin:rental_car_changelist' %}" class="text-decoration-none d-block h-100">
+                <div class="card bg-dark text-white shadow h-100">
+
+                    <div class="card-body">
+
+                        <h6 class="text-secondary">
+                            TOTAL CARS
+                        </h6>
+
+                        <h2 class="text-warning fw-bold">
+                            {{ total_cars }}
+                        </h2>
+
+                        <p class="mb-0 text-light">
+                            Vehicles in fleet
+                        </p>
+
+                        <small class="text-warning">
+                            Click to manage cars →
+                        </small>
+
+                    </div>
+
+                </div>
+            </a>
+        </div>
+
+
+        <!-- Available Cars -->
+
+        <div class="col-lg-3 col-md-6">
+            <a href="{% url 'admin:rental_car_changelist' %}" class="text-decoration-none d-block h-100">
+                <div class="card bg-dark text-white shadow h-100">
+
+                    <div class="card-body">
+
+                        <h6 class="text-secondary">
+                            AVAILABLE
+                        </h6>
+
+                        <h2 class="text-success fw-bold">
+                            {{ available_cars }}
+                        </h2>
+
+                        <p class="mb-0 text-light">
+                            Ready for rental
+                        </p>
+
+                        <small class="text-success">
+                            View cars →
+                        </small>
+
+                    </div>
+
+                </div>
+            </a>
+        </div>
+
+
+        <!-- Booked Cars -->
+
+        <div class="col-lg-3 col-md-6">
+            <a href="{% url 'admin:rental_car_changelist' %}" class="text-decoration-none d-block h-100">
+                <div class="card bg-dark text-white shadow h-100">
+
+                    <div class="card-body">
+
+                        <h6 class="text-secondary">
+                            BOOKED
+                        </h6>
+
+                        <h2 class="text-danger fw-bold">
+                            {{ booked_cars }}
+                        </h2>
+
+                        <p class="mb-0 text-light">
+                            Currently booked
+                        </p>
+
+                        <small class="text-danger">
+                            View booked cars →
+                        </small>
+
+                    </div>
+
+                </div>
+            </a>
+        </div>
+
+
+        <!-- Customers -->
+
+        <div class="col-lg-3 col-md-6">
+            <a href="{% url 'admin:rental_customer_changelist' %}" class="text-decoration-none d-block h-100">
+                <div class="card bg-dark text-white shadow h-100">
+
+                    <div class="card-body">
+
+                        <h6 class="text-secondary">
+                            CUSTOMERS
+                        </h6>
+
+                        <h2 class="text-info fw-bold">
+                            {{ total_customers }}
+                        </h2>
+
+                        <p class="mb-0 text-light">
+                            Registered customers
+                        </p>
+
+                        <small class="text-info">
+                            Manage customers →
+                        </small>
+
+                    </div>
+
+                </div>
+            </a>
+        </div>
+
+    </div>
+
+
+    <!-- BOOKING STATISTICS -->
+
+    <div class="row g-4 mb-5">
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card bg-dark text-white shadow">
+
+                <div class="card-body">
+
+                    <h6 class="text-secondary">
+                        PENDING BOOKINGS
+                    </h6>
+
+                    <h3 class="text-warning">
+                        {{ pending_bookings }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card bg-dark text-white shadow">
+
+                <div class="card-body">
+
+                    <h6 class="text-secondary">
+                        APPROVED BOOKINGS
+                    </h6>
+
+                    <h3 class="text-success">
+                        {{ approved_bookings }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card bg-dark text-white shadow">
+
+                <div class="card-body">
+
+                    <h6 class="text-secondary">
+                        RETURNED
+                    </h6>
+
+                    <h3 class="text-info">
+                        {{ returned_bookings }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card bg-dark text-white shadow">
+
+                <div class="card-body">
+
+                    <h6 class="text-secondary">
+                        CANCELLED
+                    </h6>
+
+                    <h3 class="text-danger">
+                        {{ cancelled_bookings }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ACTIVE RENTALS -->
+
+<div class="card bg-dark text-white shadow mb-4">
+
+    <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <h4 class="text-warning mb-0">
+                🚗 Currently Active Rentals
+            </h4>
+
+            <span class="badge bg-danger">
+                {{ active_rentals_count }} Active
+            </span>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="table table-dark table-hover align-middle">
+
+                <thead>
+
+                    <tr>
+                        <th>Customer</th>
+                        <th>Car</th>
+                        <th>Pickup Date</th>
+                        <th>Return Date</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for booking in active_rentals %}
+
+                    <tr>
+
+                        <td>
+                            {{ booking.customer.full_name }}
+                        </td>
+
+                        <td>
+                            {{ booking.car.brand }}
+                            {{ booking.car.model }}
+                        </td>
+
+                        <td>
+                            {{ booking.pickup_date }}
+                        </td>
+
+                        <td>
+                            {{ booking.return_date }}
+                        </td>
+
+                        <td>
+                            <span class="badge bg-danger">
+                                Currently Rented
+                            </span>
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="5"
+                            class="text-center text-secondary py-4"
+                        >
+                            No active rentals today.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- UPCOMING PICKUPS -->
+
+<div class="card bg-dark text-white shadow mb-4">
+
+    <div class="card-body">
+
+        <h4 class="text-warning mb-4">
+            📅 Upcoming Pickups
+        </h4>
+
+
+        <div class="table-responsive">
+
+            <table class="table table-dark table-hover align-middle">
+
+                <thead>
+
+                    <tr>
+                        <th>Customer</th>
+                        <th>Car</th>
+                        <th>Pickup Date</th>
+                        <th>Return Date</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for booking in upcoming_pickups %}
+
+                    <tr>
+
+                        <td>
+                            {{ booking.customer.full_name }}
+                        </td>
+
+                        <td>
+                            {{ booking.car.brand }}
+                            {{ booking.car.model }}
+                        </td>
+
+                        <td>
+                            {{ booking.pickup_date }}
+                        </td>
+
+                        <td>
+                            {{ booking.return_date }}
+                        </td>
+
+                        <td>
+                            <span class="badge bg-success">
+                                Approved
+                            </span>
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="5"
+                            class="text-center text-secondary py-4"
+                        >
+                            No upcoming pickups.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+    <!-- RECENT BOOKINGS -->
+
+    <div class="card bg-dark text-white shadow">
+
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <h4 class="text-warning mb-0">
+                    Recent Bookings
+                </h4>
+
+                <a
+                    href="/admin/rental/booking/"
+                    class="btn btn-outline-warning btn-sm"
+                >
+                    Manage Bookings
+                </a>
+
+            </div>
+
+
+            <div class="table-responsive">
+
+                <table class="table table-dark table-hover align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Customer</th>
+
+                            <th>Car</th>
+
+                            <th>Pickup</th>
+
+                            <th>Return</th>
+
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for booking in recent_bookings %}
+
+                        <tr>
+
+                            <td>
+                                {{ booking.customer.full_name }}
+                            </td>
+
+                            <td>
+                                {{ booking.car.brand }}
+                                {{ booking.car.model }}
+                            </td>
+
+                            <td>
+                                {{ booking.pickup_date }}
+                            </td>
+
+                            <td>
+                                {{ booking.return_date }}
+                            </td>
+
+                            <td>
+
+                                {% if booking.status == 'Pending' %}
+
+                                <span class="badge bg-warning text-dark">
+                                    Pending
+                                </span>
+
+                                {% elif booking.status == 'Approved' %}
+
+                                <span class="badge bg-success">
+                                    Approved
+                                </span>
+
+                                {% elif booking.status == 'Returned' %}
+
+                                <span class="badge bg-info text-dark">
+                                    Returned
+                                </span>
+
+                                {% else %}
+
+                                <span class="badge bg-danger">
+                                    Cancelled
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td
+                                colspan="5"
+                                class="text-center text-secondary py-4"
+                            >
+                                No bookings yet.
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

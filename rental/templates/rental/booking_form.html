@@ -1,0 +1,309 @@
+{% extends 'rental/base.html' %}
+
+{% block title %}
+Book {{ car.brand }} {{ car.model }} | Simon Auto's
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <!-- Page Heading -->
+            <div class="text-center mb-4">
+
+                <h1 class="text-warning fw-bold">
+                    Book Your Luxury Car
+                </h1>
+
+                <p class="text-light">
+                    Complete the form below to request your rental.
+                </p>
+
+            </div>
+
+
+            <!-- Selected Car -->
+
+            <div class="card bg-dark text-white shadow mb-4">
+
+                <div class="row g-0">
+
+                    <div class="col-md-4">
+
+                        {% if car.image %}
+
+                        <img
+                            src="{{ car.image }}"
+                            class="img-fluid rounded-start"
+                            style="height: 100%; min-height: 180px; object-fit: cover;"
+                            alt="{{ car.brand }} {{ car.model }}"
+                        >
+
+                        {% endif %}
+
+                    </div>
+
+                    <div class="col-md-8">
+
+                        <div class="card-body">
+
+                            <h3 class="text-warning">
+                                {{ car.brand }} {{ car.model }}
+                            </h3>
+
+                            <p class="mb-1">
+                                <strong>Year:</strong> {{ car.year }}
+                            </p>
+
+                            <p class="mb-1">
+                                <strong>Transmission:</strong>
+                                {{ car.transmission }}
+                            </p>
+
+                            <p class="mb-1">
+                                <strong>Fuel:</strong>
+                                {{ car.fuel_type }}
+                            </p>
+
+                            <h4 class="text-warning mt-3">
+                                ${{ car.daily_price }} / day
+                            </h4>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Success Message -->
+
+            {% if success %}
+
+            <div class="alert alert-success text-center">
+
+                <h4>Booking Submitted Successfully! 🎉</h4>
+
+                <p class="mb-0">
+                    {{ success }}
+                </p>
+
+            </div>
+
+            <div class="text-center mt-3">
+
+                <a
+                    href="{% url 'car_list' %}"
+                    class="btn btn-warning"
+                >
+                    Browse More Cars
+                </a>
+
+            </div>
+
+            {% else %}
+
+
+            <!-- Error Message -->
+
+            {% if error %}
+
+            <div class="alert alert-danger">
+                {{ error }}
+            </div>
+
+            {% endif %}
+
+
+            <!-- Booking Form -->
+
+            <div class="card bg-dark text-white shadow">
+
+                <div class="card-body p-4">
+
+                    <h4 class="text-warning mb-4">
+                        Customer Information
+                    </h4>
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+
+                        <!-- Full Name -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Full Name
+                            </label>
+
+                            <input
+                                type="text"
+                                name="full_name"
+                                class="form-control"
+                                placeholder="Enter your full name"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Email -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Email Address
+                            </label>
+
+                            <input
+                                type="email"
+                                name="email"
+                                class="form-control"
+                                placeholder="Enter your email"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Phone -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Phone Number
+                            </label>
+
+                            <input
+                                type="tel"
+                                name="phone"
+                                class="form-control"
+                                placeholder="Enter your phone number"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Address -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Address
+                            </label>
+
+                            <textarea
+                                name="address"
+                                class="form-control"
+                                rows="2"
+                                placeholder="Enter your address"
+                                required
+                            ></textarea>
+
+                        </div>
+
+
+                        <!-- Driver's License -->
+
+                        <div class="mb-4">
+
+                            <label class="form-label">
+                                Driver's License Number
+                            </label>
+
+                            <input
+                                type="text"
+                                name="drivers_license"
+                                class="form-control"
+                                placeholder="Enter your driver's license number"
+                                required
+                            >
+
+                        </div>
+
+
+                        <hr class="border-secondary">
+
+
+                        <h4 class="text-warning mb-4 mt-4">
+                            Rental Dates
+                        </h4>
+
+
+                        <!-- Pickup Date -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Pickup Date
+                            </label>
+
+                            <input
+                                type="date"
+                                name="pickup_date"
+                                class="form-control"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Return Date -->
+
+                        <div class="mb-4">
+
+                            <label class="form-label">
+                                Return Date
+                            </label>
+
+                            <input
+                                type="date"
+                                name="return_date"
+                                class="form-control"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Submit -->
+
+                        <button
+                            type="submit"
+                            class="btn btn-warning btn-lg w-100 fw-bold"
+                        >
+                             Submit Booking Request
+                        </button>
+
+
+                        <a
+                            href="{% url 'car_detail' car.id %}"
+                            class="btn btn-outline-light w-100 mt-3"
+                        >
+                            ← Back to Car Details
+                        </a>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

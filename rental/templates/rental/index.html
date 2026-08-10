@@ -1,0 +1,191 @@
+{% extends 'rental/base.html' %}
+{% load static %}
+
+{% block title %}Simon Auto's | Luxury Car Rental{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container text-center">
+
+        <h1>Drive Luxury.<br>Drive Excellence.</h1>
+
+        <p class="mt-4">
+            Experience the world's most luxurious vehicles
+            at affordable rental prices.
+        </p>
+
+        <div class="mt-5">
+
+            <a href="{% url 'car_list' %}" class="btn btn-warning btn-lg px-5 me-3">
+                Browse Cars
+            </a>
+
+            <a href="{% url 'car_list' %}" class="btn btn-outline-light btn-lg px-5">
+                Book Now
+            </a>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- Statistics -->
+<section class="container py-5">
+
+    <div class="row text-center">
+
+        <div class="col-md-3 mb-4">
+            <h1 class="text-warning">50+</h1>
+            <p>Luxury Cars</p>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <h1 class="text-warning">120+</h1>
+            <p>Happy Clients</p>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <h1 class="text-warning">24/7</h1>
+            <p>Support</p>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <h1 class="text-warning">5★</h1>
+            <p>Customer Rating</p>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- Featured Cars -->
+<section class="container py-5">
+
+    <h2 class="section-title text-center mb-5">
+        Featured Luxury Cars
+    </h2>
+
+    <div class="row">
+
+        {% for car in featured_cars %}
+
+        <div class="col-lg-4 col-md-6 mb-4">
+
+            <div class="card shadow h-100">
+
+                <img src="{{ car.image }}"
+                     class="card-img-top"
+                     style="height:250px; object-fit:cover;">
+
+                <div class="card-body">
+
+                    <h4 class="text-white fw-bold">
+                        {{ car.brand }} {{ car.model }}
+                    </h4>
+
+                    <p class="text-warning fw-bold">
+                        ${{ car.daily_price }}/day
+                    </p>
+
+
+                    <p class="text-light">
+                       {{ car.description|truncatewords:10 }}
+                    </p>
+
+                    <a href="{% url 'car_detail' car.id %}"
+                       class="btn btn-warning w-100">
+
+                        View Details
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div class="text-center">
+            <h3>No cars available.</h3>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- Why Choose Us -->
+<section class="container py-5">
+
+<h2 class="section-title">
+Why Choose Simon Auto's?
+</h2>
+
+<div class="row text-center">
+
+<div class="col-md-4 mb-4">
+
+<h3>🚗</h3>
+
+<h4>Luxury Fleet</h4>
+
+<p>
+Choose from premium sports cars,
+SUVs and luxury sedans.
+</p>
+
+</div>
+
+<div class="col-md-4 mb-4">
+
+<h3>🛡️</h3>
+
+<h4>Fully Insured</h4>
+
+<p>
+Every vehicle is professionally maintained
+and insured.
+</p>
+
+</div>
+
+<div class="col-md-4 mb-4">
+
+<h3>⭐</h3>
+
+<h4>Premium Service</h4>
+
+<p>
+Exceptional customer support
+24 hours a day.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Footer -->
+<footer class="bg-dark text-center py-4 mt-5">
+
+<h5 class="text-warning">
+Simon Auto's
+</h5>
+
+<p>
+Luxury Car Rental & Management System
+</p>
+
+<p>
+© 2026 Simon Auto's. All Rights Reserved.
+</p>
+
+</footer>
+
+{% endblock %}  

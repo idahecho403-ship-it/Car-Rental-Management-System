@@ -1,0 +1,321 @@
+{% extends 'rental/base.html' %}
+
+{% block title %}Our Fleet | Simon Auto's{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- Page Heading -->
+    <div class="text-center mb-5">
+        <h1 class="text-warning fw-bold">
+            Our Luxury Fleet
+        </h1>
+
+        <p class="text-light">
+            Explore our collection of premium and exotic vehicles.
+        </p>
+    </div>
+
+
+    <!-- SEARCH & FILTERS -->
+    <div class="mb-5">
+
+        <form method="GET" class="p-4 rounded shadow bg-dark">
+
+            <div class="row g-3">
+
+                <!-- Search -->
+                <div class="col-lg-4 col-md-6">
+
+                    <label class="form-label text-white">
+                        Search Cars
+                    </label>
+
+                    <input
+                        type="text"
+                        name="search"
+                        class="form-control"
+                        placeholder="Search Ferrari, Lamborghini..."
+                        value="{{ search }}"
+                    >
+
+                </div>
+
+
+                <!-- Brand -->
+                <div class="col-lg-2 col-md-6">
+
+                    <label class="form-label text-white">
+                        Brand
+                    </label>
+
+                    <select name="brand" class="form-select">
+
+                        <option value="">
+                            All Brands
+                        </option>
+
+                        {% for item in brands %}
+
+                        <option
+                            value="{{ item }}"
+                            {% if selected_brand == item %}selected{% endif %}
+                        >
+                            {{ item }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- Fuel -->
+                <div class="col-lg-2 col-md-6">
+
+                    <label class="form-label text-white">
+                        Fuel
+                    </label>
+
+                    <select name="fuel_type" class="form-select">
+
+                        <option value="">
+                            All Fuel
+                        </option>
+
+                        <option value="Petrol"
+                            {% if selected_fuel == "Petrol" %}selected{% endif %}>
+                            Petrol
+                        </option>
+
+                        <option value="Diesel"
+                            {% if selected_fuel == "Diesel" %}selected{% endif %}>
+                            Diesel
+                        </option>
+
+                        <option value="Electric"
+                            {% if selected_fuel == "Electric" %}selected{% endif %}>
+                            Electric
+                        </option>
+
+                        <option value="Hybrid"
+                            {% if selected_fuel == "Hybrid" %}selected{% endif %}>
+                            Hybrid
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Transmission -->
+                <div class="col-lg-2 col-md-6">
+
+                    <label class="form-label text-white">
+                        Transmission
+                    </label>
+
+                    <select name="transmission" class="form-select">
+
+                        <option value="">
+                            All
+                        </option>
+
+                        <option value="Automatic"
+                            {% if selected_transmission == "Automatic" %}selected{% endif %}>
+                            Automatic
+                        </option>
+
+                        <option value="Manual"
+                            {% if selected_transmission == "Manual" %}selected{% endif %}>
+                            Manual
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Maximum Price -->
+                <div class="col-lg-2 col-md-6">
+
+                    <label class="form-label text-white">
+                        Max Price / Day
+                    </label>
+
+                    <input
+                        type="number"
+                        name="max_price"
+                        class="form-control"
+                        placeholder="e.g. 3000"
+                        value="{{ max_price }}"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- Buttons -->
+            <div class="mt-4 d-flex gap-2">
+
+                <button
+                    type="submit"
+                    class="btn btn-warning"
+                >
+                    🔍 Search & Filter
+                </button>
+
+                <a
+                    href="{% url 'car_list' %}"
+                    class="btn btn-outline-light"
+                >
+                    Reset
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- CAR CARDS -->
+    <div class="row">
+
+        {% for car in cars %}
+
+        <div class="col-lg-4 col-md-6 mb-4">
+
+            <div class="card bg-dark text-white shadow h-100 overflow-hidden">
+
+                <!-- Car Image -->
+
+                {% if car.image %}
+
+                <img
+                    src="{{ car.image }}"
+                    class="card-img-top"
+                    style="height: 250px; object-fit: cover;"
+                    alt="{{ car.brand }} {{ car.model }}"
+                >
+
+                {% else %}
+
+                <div
+                    class="d-flex align-items-center justify-content-center bg-secondary"
+                    style="height: 250px;"
+                >
+                    <span>
+                        No Image Available
+                    </span>
+                </div>
+
+                {% endif %}
+
+
+                <!-- Card Information -->
+
+                <div class="card-body">
+
+                    <h4 class="fw-bold text-white">
+                        {{ car.brand }} {{ car.model }}
+                    </h4>
+
+
+                    <p class="text-warning fw-bold fs-5">
+                        ${{ car.daily_price }}/day
+                    </p>
+
+
+                    <p>
+                        <strong>Year:</strong>
+                        {{ car.year }}
+                    </p>
+
+
+                    <p>
+                        <strong>Transmission:</strong>
+                        {{ car.transmission }}
+                    </p>
+
+
+                    <p>
+                        <strong>Fuel:</strong>
+                        {{ car.fuel_type }}
+                    </p>
+
+
+                    <p>
+                        <strong>Color:</strong>
+                        {{ car.color }}
+                    </p>
+
+
+                    <p>
+                        <strong>Status:</strong>
+
+                        {% if car.status == "Available" %}
+
+                        <span class="badge bg-success">
+                            Available
+                        </span>
+
+                        {% elif car.status == "Booked" %}
+
+                        <span class="badge bg-danger">
+                            Booked
+                        </span>
+
+                        {% else %}
+
+                        <span class="badge bg-warning text-dark">
+                            {{ car.status }}
+                        </span>
+
+                        {% endif %}
+
+                    </p>
+
+
+                    <!-- View Details -->
+
+                    <a
+                        href="{% url 'car_detail' car.id %}"
+                        class="btn btn-warning w-100 mt-2"
+                    >
+                        View Details
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        {% empty %}
+
+        <!-- No Results -->
+
+        <div class="col-12 text-center py-5">
+
+            <h3 class="text-white">
+                No cars found.
+            </h3>
+
+            <p class="text-light">
+                Try changing your search or filter.
+            </p>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

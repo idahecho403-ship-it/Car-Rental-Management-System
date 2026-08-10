@@ -1,0 +1,196 @@
+{% extends 'rental/base.html' %}
+
+{% block title %}
+{{ car.brand }} {{ car.model }} | Simon Auto's
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row g-5">
+
+        <!-- CAR IMAGE -->
+        <div class="col-lg-7">
+
+            {% if car.image %}
+
+            <img
+                src="{{ car.image }}"
+                alt="{{ car.brand }} {{ car.model }}"
+                class="img-fluid rounded shadow"
+                style="width: 100%; height: 500px; object-fit: cover;"
+            >
+
+            {% else %}
+
+            <div
+                class="bg-secondary rounded d-flex align-items-center justify-content-center"
+                style="height: 500px;"
+            >
+                <h4 class="text-white">
+                    No Image Available
+                </h4>
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- CAR INFORMATION -->
+        <div class="col-lg-5">
+
+            <span class="badge bg-warning text-dark mb-3">
+                SIMON AUTO'S
+            </span>
+
+            <h1 class="fw-bold text-white">
+                {{ car.brand }} {{ car.model }}
+            </h1>
+
+            <h3 class="text-warning fw-bold mt-3">
+                ${{ car.daily_price }} / day
+            </h3>
+
+
+            <!-- STATUS -->
+
+            <div class="mt-3 mb-4">
+
+                {% if car.status == "Available" %}
+
+                <span class="badge bg-success fs-6">
+                    ✓ Available for Rental
+                </span>
+
+                {% elif car.status == "Booked" %}
+
+                <span class="badge bg-danger fs-6">
+                    ✕ Currently Booked
+                </span>
+
+                {% else %}
+
+                <span class="badge bg-warning text-dark fs-6">
+                    {{ car.status }}
+                </span>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
+
+            {% if car.description %}
+
+            <p class="text-light">
+                {{ car.description }}
+            </p>
+
+            {% else %}
+
+            <p class="text-secondary">
+                Experience luxury, comfort and performance with
+                {{ car.brand }} {{ car.model }}.
+                Contact Simon Auto's to reserve this vehicle.
+            </p>
+
+            {% endif %}
+
+
+            <!-- CAR SPECIFICATIONS -->
+
+            <div class="card bg-dark text-white border-secondary mt-4">
+
+                <div class="card-body">
+
+                    <h5 class="text-warning mb-4">
+                        Vehicle Specifications
+                    </h5>
+
+                    <div class="row g-3">
+
+                        <div class="col-6">
+                            <strong>Brand</strong>
+                            <br>
+                            {{ car.brand }}
+                        </div>
+
+                        <div class="col-6">
+                            <strong>Model</strong>
+                            <br>
+                            {{ car.model }}
+                        </div>
+
+                        <div class="col-6">
+                            <strong>Year</strong>
+                            <br>
+                            {{ car.year }}
+                        </div>
+
+                        <div class="col-6">
+                            <strong>Color</strong>
+                            <br>
+                            {{ car.color }}
+                        </div>
+
+                        <div class="col-6">
+                            <strong>Fuel</strong>
+                            <br>
+                            {{ car.fuel_type }}
+                        </div>
+
+                        <div class="col-6">
+                            <strong>Transmission</strong>
+                            <br>
+                            {{ car.transmission }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- BOOK BUTTON -->
+
+            {% if car.status == "Available" %}
+
+            <a
+                href="{% url 'book_car' car.id %}"
+                class="btn btn-warning btn-lg w-100 mt-4 fw-bold"
+            >
+                 Book This Car
+            </a>
+
+            {% else %}
+
+            <button
+                class="btn btn-secondary btn-lg w-100 mt-4"
+                disabled
+            >
+                Currently Unavailable
+            </button>
+
+            {% endif %}
+
+
+            <!-- BACK BUTTON -->
+
+            <a
+                href="{% url 'car_list' %}"
+                class="btn btn-outline-light w-100 mt-3"
+            >
+                ← Back to Fleet
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

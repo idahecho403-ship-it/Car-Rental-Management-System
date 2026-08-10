@@ -1,0 +1,142 @@
+{% extends 'rental/base.html' %}
+
+{% block content %}
+
+<section class="about-page">
+
+    <div class="about-hero">
+        <h1>About Simon Auto's</h1>
+        <p>Premium cars. Exceptional service. Unforgettable journeys.</p>
+    </div>
+
+    <div class="about-content">
+
+        <div class="about-card">
+            <h2>Who We Are</h2>
+            <p>
+                Simon Auto's is a premium car rental service designed to provide
+                customers with access to quality, comfortable and luxury vehicles
+                for both personal and business travel.
+            </p>
+        </div>
+
+        <div class="about-card">
+            <h2>What We Offer</h2>
+            <p>
+                Our fleet includes carefully selected vehicles suitable for
+                everyday transportation, business trips, special occasions and
+                luxury experiences.
+            </p>
+        </div>
+
+        <div class="about-card">
+            <h2>Why Choose Us?</h2>
+            <p>
+                We make vehicle rental simple and convenient. Customers can
+                browse available cars, view vehicle details, choose rental dates
+                and submit their booking requests online.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="about-cta">
+        <h2>Ready to Ride?</h2>
+        <p>Explore our available vehicles and find the perfect car for your journey.</p>
+
+        <a href="{% url 'car_list' %}" class="about-btn">
+            Browse Our Cars
+        </a>
+    </div>
+
+</section>
+
+<style>
+.about-page {
+    padding: 50px 8%;
+    color: white;
+}
+
+.about-hero {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.about-hero h1 {
+    color: #f5a623;
+    font-size: 42px;
+    margin-bottom: 12px;
+}
+
+.about-hero p {
+    font-size: 18px;
+    color: #ddd;
+}
+
+.about-content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.about-card {
+    background: rgba(255,255,255,0.06);
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.about-card h2 {
+    color: #f5a623;
+    margin-bottom: 15px;
+}
+
+.about-card p {
+    color: #ddd;
+    line-height: 1.7;
+}
+
+.about-cta {
+    text-align: center;
+    margin-top: 60px;
+}
+
+.about-cta h2 {
+    color: #f5a623;
+}
+
+.about-cta p {
+    color: #ddd;
+    margin-bottom: 25px;
+}
+
+.about-btn {
+    display: inline-block;
+    background: #f5a623;
+    color: #111;
+    padding: 13px 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.about-btn:hover {
+    opacity: 0.85;
+}
+
+@media (max-width: 768px) {
+    .about-content {
+        grid-template-columns: 1fr;
+    }
+
+    .about-hero h1 {
+        font-size: 32px;
+    }
+
+    .about-page {
+        padding: 35px 5%;
+    }
+}
+</style>
+
+{% endblock %}
