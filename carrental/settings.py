@@ -77,10 +77,28 @@ WSGI_APPLICATION = 'carrental.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+import os
+import shutil
+
+if os.environ.get("VERCEL"):
+    DATABASE_PATH = "/tmp/db.sqlite3"
+
+    if not os.path.exists(DATABASE_PATH):
+        shutil.copy(BASE_DIR / "db.sqlite3", DATABASE_PATH)
+else:
+    DATABASE_PATH = BASE_DIR / "db.sqlite3"
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": DATABASE_PATH,
     }
 }
 
