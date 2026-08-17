@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-n9w*g_ys4q!9b=oi_k)x)*okdx@pa#_p=#!sfsdk#378ehv(=!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ALLOWED_HOSTS = [
-    ".vercel.app",
+    "simon-autos-env.eba-tcnvakq9.eu-west-1.elasticbeanstalk.com",
+    ".elasticbeanstalk.com",
+    "172.31.40.255",
     "localhost",
     "127.0.0.1",
 ]
@@ -84,21 +86,10 @@ WSGI_APPLICATION = 'carrental.wsgi.application'
 #     }
 # }
 
-import os
-import shutil
-
-if os.environ.get("VERCEL"):
-    DATABASE_PATH = "/tmp/db.sqlite3"
-
-    if not os.path.exists(DATABASE_PATH):
-        shutil.copy(BASE_DIR / "db.sqlite3", DATABASE_PATH)
-else:
-    DATABASE_PATH = BASE_DIR / "db.sqlite3"
-
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": DATABASE_PATH,
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
