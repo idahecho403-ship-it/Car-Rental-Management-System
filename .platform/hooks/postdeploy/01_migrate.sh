@@ -86,5 +86,48 @@ echo "========================================"
 python manage.py shell -c "from rental.models import Car; print('FINAL CAR COUNT:', Car.objects.count())"
 
 echo "========================================"
+echo "CREATING/UPDATING ADMIN ACCOUNT"
+echo "========================================"
+
+python manage.py shell <<'PYTHON'
+
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+username = "lilvix999"
+email = "idahecho403@gmail.com"
+password = "carrental"
+
+user, created = User.objects.get_or_create(
+    username=username,
+    defaults={
+        "email": email,
+        "is_staff": True,
+        "is_superuser": True,
+        "is_active": True,
+    }
+)
+
+if not created:
+    user.email = email
+    user.is_staff = True
+    user.is_superuser = True
+    user.is_active = True
+
+user.set_password(password)
+user.save()
+
+print("========================================")
+print("ADMIN ACCOUNT READY")
+print("Username:", username)
+print("Email:", email)
+print("Superuser:", user.is_superuser)
+print("Staff:", user.is_staff)
+print("========================================")
+
+PYTHON
+
+echo "========================================"
 echo "DEPLOYMENT COMPLETE"
 echo "========================================"
