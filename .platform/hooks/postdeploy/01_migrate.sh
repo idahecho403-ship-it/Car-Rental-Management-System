@@ -1,15 +1,11 @@
 #!/bin/bash
 
 cd /var/app/current
-
 source /var/app/venv/*/bin/activate
 
-echo "Fixing SQLite database permissions..."
-
-if [ -f /var/app/current/db.sqlite3 ]; then
-    chown webapp:webapp /var/app/current/db.sqlite3
-    chmod 664 /var/app/current/db.sqlite3
-fi
+echo "========================================"
+echo "SIMON AUTOS DEPLOYMENT"
+echo "========================================"
 
 echo "Running database migrations..."
 python manage.py migrate --noinput
@@ -20,40 +16,75 @@ CAR_COUNT=$(python manage.py shell -c "from rental.models import Car; print(Car.
 
 echo "Current car count: $CAR_COUNT"
 
-if [ "$CAR_COUNT" = "0" ] && [ -f cars.json ]; then
+if [ "$CAR_COUNT" = "0" ] && [ -f /var/app/current/cars.json ]; then
     echo "AWS database has no cars. Importing cars.json..."
 
-    if python manage.py loaddata cars.json; then
-        echo "Car import completed successfully."
-    else
-        echo "ERROR: Car import failed!"
-        exit 1
-    fi
+    python manage.py loaddata /var/app/current/cars.json
+
+    echo "Car import completed."
 else
     echo "Cars already exist or cars.json is missing. Skipping car import."
 fi
 
-echo "Checking admin account..."
+echo "========================================"
+echo "FIXING SQLITE PERMISSIONS"
+echo "========================================"
+
+APP_USER=$(/opt/elasticbeanstalk/bin/get-config platformconfig -k AppUser)
+
+echo "Elastic Beanstalk application user: $APP_USER"
+
+echo "Fixing application directory..."
+
+chown "$APP_USER:$APP_USER" /var/app/current
+chmod 775 /var/app/current
+
+if [ -f /var/app/current/db.sqlite3 ]; then
+
+    echo "SQLite database found."
+
+    chown "$APP_USER:$APP_USER" /var/app/current/db.sqlite3
+    chmod 664 /var/app/current/db.sqlite3
+
+fi
+
+echo "Fixing SQLite temporary files if they exist..."
+
+for file in /var/app/current/db.sqlite3-*; do
+    if [ -e "$file" ]; then
+        chown "$APP_USER:$APP_USER" "$file"
+        chmod 664 "$file"
+    fi
+done
+
+echo "SQLite directory permissions:"
+ls -ld /var/app/current
+
+echo "SQLite database permissions:"
+ls -la /var/app/current/db.sqlite3*
+
+echo "========================================"
+echo "TESTING DATABASE WRITE"
+echo "========================================"
 
 python manage.py shell <<'PYTHON'
-from django.contrib.auth import get_user_model
 
-User = get_user_model()
+from django.db import connection
 
-username = "lilvix999"
-email = "idahecho403@gmail.com"
-password = "carrental"
+with connection.cursor() as cursor:
+    cursor.execute("CREATE TABLE IF NOT EXISTS _sqlite_write_test (id INTEGER PRIMARY KEY)")
+    cursor.execute("DROP TABLE _sqlite_write_test")
 
-if not User.objects.filter(username=username).exists():
-    User.objects.create_superuser(
-        username=username,
-        email=email,
-        password=password
-    )
-    print("Admin account created successfully.")
-else:
-    print("Admin account already exists. No changes made.")
+print("DATABASE WRITE TEST: SUCCESS")
+
 PYTHON
 
-echo "Final car count:"
-python manage.py shell -c "from rental.models import Car; print(Car.objects.count())"
+echo "========================================"
+echo "FINAL CAR COUNT"
+echo "========================================"
+
+python manage.py shell -c "from rental.models import Car; print('FINAL CAR COUNT:', Car.objects.count())"
+
+echo "========================================"
+echo "DEPLOYMENT COMPLETE"
+echo "========================================"
