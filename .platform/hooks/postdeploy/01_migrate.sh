@@ -4,6 +4,13 @@ cd /var/app/current
 
 source /var/app/venv/*/bin/activate
 
+echo "Fixing SQLite database permissions..."
+
+if [ -f /var/app/current/db.sqlite3 ]; then
+    chown webapp:webapp /var/app/current/db.sqlite3
+    chmod 664 /var/app/current/db.sqlite3
+fi
+
 echo "Running database migrations..."
 python manage.py migrate --noinput
 
