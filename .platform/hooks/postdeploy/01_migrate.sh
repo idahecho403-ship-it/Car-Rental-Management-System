@@ -26,5 +26,27 @@ else
     echo "Cars already exist or cars.json is missing. Skipping car import."
 fi
 
+echo "Checking admin account..."
+
+python manage.py shell <<'PYTHON'
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+username = "lilvix999"
+email = "idahecho403@gmail.com"
+password = "carrental"
+
+if not User.objects.filter(username=username).exists():
+    User.objects.create_superuser(
+        username=username,
+        email=email,
+        password=password
+    )
+    print("Admin account created successfully.")
+else:
+    print("Admin account already exists. No changes made.")
+PYTHON
+
 echo "Final car count:"
 python manage.py shell -c "from rental.models import Car; print(Car.objects.count())"
